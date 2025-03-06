@@ -7,8 +7,8 @@ class Item{
     int itemId;
     String name;
     String description;
-    int price;
-    public Item(int  itemId,String name, String description,int price){
+    double price;
+    public Item(int  itemId,String name, String description,double price){
         this.itemId=itemId;
         this.name=name;
         this.description=description;
@@ -26,13 +26,16 @@ class ShoppingCart{
     // Main Method
     public static void main(String args[]){
 
-        //  Ref Value And Quantity
+        //  Item Ref Value And Quantity
         HashMap<Item, Integer> cart=new HashMap<>();
+
         // ItemId And Item Ref Value
         HashMap< Integer, Item> itemList=new HashMap<>();
 
         int exit=1;
         Scanner sc=new Scanner(System.in);
+        Scanner scInt=new Scanner(System.in);
+
         while(exit!=0){
 
             // All  available options sre listed below
@@ -59,33 +62,54 @@ class ShoppingCart{
 
             // Add To Cart -> 1
             if(choice==1){
-                System.out.print("Enter  product name : ");
-                String name=sc.next();
+                System.out.print("Enter item id : ");
+                int itemId=sc.nextInt();
+
+                System.out.print("Enter product price : ");
+                double price=sc.nextInt();
+                
+                // Check Value Greter Than 0
+                if(price < 0){
+                    System.out.print("Warning ⚠️...Enter product price(It Must Be Greter Than 0) : ");
+                    price=scInt.nextInt();
+                }
 
                
 
-                System.out.print("Enter item id : ");
-                int itemId=sc.nextInt();
-                
-              
-
-                System.out.print("Enter product description : ");
+                System.out.print("Enter  product name (Dont Use space Betwen Word) : ");
+                String name=sc.next();
+                System.out.print("Enter product description (Dont Use space Betwen Word) : ");
                 String description=sc.next();
 
-                System.out.print("Enter product prise : ");
-                int price=sc.nextInt();
-                // Check Value Greter Than 0
-                if(price < 0){
-                    System.out.print("Warning ⚠️...Enter product prise(It Must Be Greter Than 0) : ");
-                    price=sc.nextInt();
-                }
+                System.out.print("Enter quantity of "+name+"  : ");
+                int quantity;
+                
+                while(true){
+                    if(sc.hasNextInt()){
+                        quantity=sc.nextInt();
+                        break;
+                    }
+                    else{
+                        System.out.print("Please enter an Integer : ");
+                        sc.next();
 
-                System.out.print("Enter quantity "+name+" : ");
-                int quantity=sc.nextInt();
-                if(quantity < 0){
-                    System.out.print("Warning ⚠️...Enter quantity (Quantity Must Be Greter Than 0 ) "+name+" : ");
-                    quantity=sc.nextInt();;
+                    }
+
                 }
+           
+
+
+
+                // Check Value Greter Than 0
+                if(quantity < 0 ){
+                    System.out.print("Warning ⚠️...Enter quantity (Quantity Must Be Greter Than 0 ) : ");
+                    quantity=sc.nextInt();
+                }
+                
+
+                           
+              
+              
 
                 // Check item id already present or not
                 if(!itemList.containsKey(itemId)){
@@ -108,23 +132,31 @@ class ShoppingCart{
             // Show Quantity -> 2
             else if(choice==2){
                 System.out.print("Enter item id : ");
-                int id= sc.nextInt();
+                int id= scInt.nextInt();
                 int totalNoOfItem=displayQty(cart,itemList,id);
-
-              
-
             }
             // Update Quantity -> 3
             else if(choice==3){
-
                 System.out.print("Enter item id : ");
-                int itemId=sc.nextInt();
-
+                int itemId=scInt.nextInt();
                 System.out.print("Enter Quantity : ");
-                int quantity=sc.nextInt();
+                int quantity;
+                // Check Value Is Integer or Not
+                while(true){
+                    if(sc.hasNextInt()){
+                        quantity=sc.nextInt();
+                        break;
+                    }
+                    else{
+                        System.out.print("Please enter an Integer : ");
+                        sc.next();
+
+                    }
+
+                }
                 if(quantity < 0){
                     System.out.print("Warning ⚠️...Enter quantity (Quantity Must Be Greter Than 0 ) : ");
-                    quantity=sc.nextInt();;
+                    quantity=scInt.nextInt();;
                 }
 
                 updateQty(cart,itemList,itemId,quantity);
@@ -133,7 +165,7 @@ class ShoppingCart{
             // Delete Item -> 4
             else if(choice==4){
                 System.out.print("Enter Item Id : ");
-                int itemId=sc.nextInt();
+                int itemId=scInt.nextInt();
 
                 if(itemList.containsKey(itemId)){
                     deleteItem(cart,itemList,itemId);
@@ -141,17 +173,14 @@ class ShoppingCart{
                 else{
                     System.out.println("Please Enter One Valid Item Id");
                 }
-          
             }
             // Display Cart Total Value -> 5
             else if(choice==5){
                 double totalPrice=displayBill(cart);
-                System.out.println("Total cart price = "+totalPrice);
-
+                System.out.println("Total cart price = "+ totalPrice);
             }
             // Other Wise
             else if (choice >5 || choice <0){
-
                 System.out.println("😓This feature is comming soon...");
                 System.out.println("Please enter number 1 or 2 or 3 or 4 or 5");
             }
@@ -159,19 +188,15 @@ class ShoppingCart{
             else{
                 break;
             }
-
-            
             // Break From Loop
             System.out.print("If You Want To exit, Press 0. Otherwise, press 1 :  ");
-            exit =sc.nextInt();
+            exit =scInt.nextInt();
 
             // Extra Security 
             if(exit==0){
                  System.out.print("Are You sure? Press 0 again to confirm exit, Otherwise press 1 : ");
-                 exit =sc.nextInt(); 
-            }
-           
-            
+                 exit =scInt.nextInt(); 
+            }   
         }  
     }
 
@@ -209,7 +234,7 @@ class ShoppingCart{
             cart.replace(item,cart.get(item)+quantity);
         }
         else{
-            System.out.println("This Item Is not Abilible Plese Enter This Item ");
+            System.out.println("This Item Id Is not Abilible Plese Enter one Valid Id ");
         }
     }
 
@@ -233,12 +258,10 @@ class ShoppingCart{
     // Display Bill Method
     public static double displayBill(Map<Item,Integer>cart){
         double totalPrice=0;
-
         if(cart.isEmpty()){
             return 0;
 
         }
-
         else{
             System.out.println("");
             System.out.println("------------Meta Mart------------------Thursday 6 Mar 2025------------");
@@ -254,11 +277,8 @@ class ShoppingCart{
  
            
         }
-         return totalPrice;
-
+        return totalPrice;
     }
-
-
 }
 
 

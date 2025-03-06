@@ -1,27 +1,45 @@
+
 import java.util.Scanner;
 import java.util.Scanner;
 import java.util.HashMap;
 import java.util.Map;
 
 
+
 // Item Structure
-class Item{
-    int itemId;
-    String name;
-    String description;
-    double price;
-    public Item(int  itemId,String name, String description,double price){
+ class Item{
+    private int itemId;
+    private String name;
+    private String description;
+    private double price;
+ 
+
+    public  void setItem(int  itemId,String name, String description,double price){
         this.itemId=itemId;
         this.name=name;
         this.description=description;
         this.price=price;
     }
 
-   
- 
+    public int getItemId(){
+        return this.itemId;
+    }
+    public String getName(){
+        return this.name;
+    }
+    public String getDescription(){
+        return this.description;
+    }
+    public double getPrice(){
+        return this.price;
+    }
+
+
 }
 
+
 public class ShoppingCart{
+
 
     // Main Method
     public static void main(String args[]){
@@ -32,18 +50,27 @@ public class ShoppingCart{
         // ItemId And Item Ref Value
         HashMap< Integer, Item> itemList=new HashMap<>();
 
-        int exit=1;
+        int exit=1;   /* This Exit variable Controll While Loop */
         Scanner sc=new Scanner(System.in);
         Scanner scInt=new Scanner(System.in);
 
+        /*
+        Inside While Loop Controll All Actions
+        * 1-> Add To cart
+        * 2-> Show Quantity
+        * 3-> Update Item
+        * 4-> Deleate Item
+        * 5-> Display Bill
+        */
         while(exit!=0){
 
             // All  available options sre listed below
             System.out.println("----------------All available items-----------------");
             for(Integer itemId: itemList.keySet()){
                 Item item=itemList.get(itemId);
-                System.out.println(itemId +" -> "+ item.name+" -> "+item.price);
+                System.out.println(itemId +" -> "+ item.getName()+" -> "+item.getPrice());
             }
+            
             System.out.println("----------------------------------------------------");
            
 
@@ -60,9 +87,11 @@ public class ShoppingCart{
             System.out.print("Enter the number corresponding to the action you want to perform : ");
             int choice =sc.nextInt();
 
-            // Add To Cart -> 1
+             
+            //Add To Cart -> 1
+           
             if(choice==1){
-                System.out.print("Enter item id : ");
+                System.out.print(  "Enter item id : ");
                 int itemId=sc.nextInt();
 
                 System.out.print("Enter product price : ");
@@ -114,7 +143,8 @@ public class ShoppingCart{
                 // Check item id already present or not
                 if(!itemList.containsKey(itemId)){
                     //Create a new item object and add it to the item list
-                    Item item=new Item(itemId,name,description,price);
+                    Item item=new Item();
+                    item.setItem(itemId,name,description,price);
                     itemList.put(itemId,item);
                     // Call add to cart method
                     addToCart(cart,item,quantity);
@@ -188,9 +218,9 @@ public class ShoppingCart{
             else{
                 break;
             }
-            // Break From Loop
+            // Break From Loop 
             System.out.print("If You Want To exit, Press 0. Otherwise, press 1 :  ");
-            exit =scInt.nextInt();
+            exit = sc.nextInt();
 
             // Extra Security 
             if(exit==0){
@@ -220,7 +250,7 @@ public class ShoppingCart{
             return 0;
         }
         Item item=itemList.get(itemId);
-        System.out.println("Total Number of "+item.name+" = "+cart.get(item));
+        System.out.println("Total Number of "+item.getName()+" = "+cart.get(item));
         return cart.get(item);
         
     }
@@ -248,7 +278,7 @@ public class ShoppingCart{
             return;
         }
         else{
-            System.out.println(item.name +" Deleted Successfully");
+            System.out.println(item.getName() +" Deleted Successfully");
             cart.remove(item);
         }
 
@@ -270,8 +300,8 @@ public class ShoppingCart{
             System.out.println("Id"+"           "+"Name"+"           "+"Quantity"+"           "+"Price");
             System.out.println("----------------------------------------------------------------------");
             for(Item item: cart.keySet()){
-                totalPrice+=cart.get(item)*item.price;
-                System.out.println(item.itemId+"          "+item.name+"          "+cart.get(item)+"             "+cart.get(item)*item.price);
+                totalPrice+=cart.get(item)*item.getPrice();
+                System.out.println(item.getItemId()+"          "+item.getName()+"          "+cart.get(item)+"             "+cart.get(item)*item.getPrice());
             }
             System.out.println("----------------------------------------------------------------------");
  

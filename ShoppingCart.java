@@ -1,5 +1,6 @@
 
 import java.util.*;
+import java.util.Scanner;
 
 // Item Structure
 class Item{
@@ -19,6 +20,8 @@ class Item{
 }
 
 class ShoppingCart{
+
+
     
     // Main Method
     public static void main(String args[]){
@@ -29,44 +32,73 @@ class ShoppingCart{
         HashMap< Integer, Item> itemList=new HashMap<>();
 
         int exit=1;
+        Scanner sc=new Scanner(System.in);
         while(exit!=0){
 
-            // All Option Available Write Now
-            System.out.println(itemList);
-            System.out.println("Add To Cart -> 1");
-            System.out.println("Show Quantity -> 2");
-            System.out.println("Update Quantity -> 3");
-            System.out.println("Delete Item -> 4");
-            System.out.println("Display Cart Total Value -> 5");
-            System.out.print("Enter The Number What You Want To Do : ");
-            Scanner sc=new Scanner(System.in);
+            // All  available options sre listed below
+            System.out.println("----------------All available items-----------------");
+            for(Integer itemId: itemList.keySet()){
+                Item item=itemList.get(itemId);
+                System.out.println(itemId +" -> "+ item.name+" -> "+item.price);
+            }
+            System.out.println("----------------------------------------------------");
+           
+
+            System.out.println("---------All available actions listed Below---------");
+
+            System.out.println("Add to cart press-> 1");
+            System.out.println("Show quantity press -> 2");
+            System.out.println("Update quantity press -> 3");
+            System.out.println("Delete item press -> 4");
+            System.out.println("Display Bill press -> 5");
+            System.out.println("Exit -> 0 ");
+            
+            System.out.println("----------------------------------------------------");
+            System.out.print("Enter the number corresponding to the action you want to perform : ");
             int choice =sc.nextInt();
 
             // Add To Cart -> 1
             if(choice==1){
-                System.out.print("Enter Product Name : ");
+                System.out.print("Enter  product name : ");
                 String name=sc.next();
 
-                System.out.print("Enter Item Id : ");
-                int itemId=sc.nextInt();
+               
 
-                System.out.print("Enter Product Description : ");
+                System.out.print("Enter item id : ");
+                int itemId=sc.nextInt();
+                
+              
+
+                System.out.print("Enter product description : ");
                 String description=sc.next();
 
-                System.out.print("Enter Product Prise : ");
-                int prise=sc.nextInt();
+                System.out.print("Enter product prise : ");
+                int price=sc.nextInt();
+                // Check Value Greter Than 0
+                if(price < 0){
+                    System.out.print("Warning ⚠️...Enter product prise(It Must Be Greter Than 0) : ");
+                    price=sc.nextInt();
+                }
 
-                System.out.print("Enter Quentity "+name+" : ");
+                System.out.print("Enter quantity "+name+" : ");
                 int quantity=sc.nextInt();
+                if(quantity < 0){
+                    System.out.print("Warning ⚠️...Enter quantity (Quantity Must Be Greter Than 0 ) "+name+" : ");
+                    quantity=sc.nextInt();;
+                }
 
+                // Check item id already present or not
                 if(!itemList.containsKey(itemId)){
-                    Item item=new Item(itemId,name,description,prise);
+                    //Create a new item object and add it to the item list
+                    Item item=new Item(itemId,name,description,price);
                     itemList.put(itemId,item);
+                    // Call add to cart method
                     addToCart(cart,item,quantity);
                     System.out.println("Item Added Successfully");
                 }
+                // if item id already present it item list then show this
                 else{
-                    System.out.println("Iten Id is Is Already Stored Please Update item or Enter One Unique Id");
+                    System.out.println(" Warning ⚠️: An Item with this ID is already stored. Please update the item or enter a unique ID");
                 }
                 
            
@@ -75,7 +107,7 @@ class ShoppingCart{
 
             // Show Quantity -> 2
             else if(choice==2){
-                System.out.print("Enter Item Id : ");
+                System.out.print("Enter item id : ");
                 int id= sc.nextInt();
                 int totalNoOfItem=displayQty(cart,itemList,id);
 
@@ -85,11 +117,15 @@ class ShoppingCart{
             // Update Quantity -> 3
             else if(choice==3){
 
-                System.out.print("Enter Item id : ");
+                System.out.print("Enter item id : ");
                 int itemId=sc.nextInt();
 
                 System.out.print("Enter Quantity : ");
                 int quantity=sc.nextInt();
+                if(quantity < 0){
+                    System.out.print("Warning ⚠️...Enter quantity (Quantity Must Be Greter Than 0 ) : ");
+                    quantity=sc.nextInt();;
+                }
 
                 updateQty(cart,itemList,itemId,quantity);
 
@@ -109,24 +145,29 @@ class ShoppingCart{
             }
             // Display Cart Total Value -> 5
             else if(choice==5){
-                double total Price=displayBill(cart);
-                System.out.println("Total cart Price = "+total);
+                double totalPrice=displayBill(cart);
+                System.out.println("Total cart price = "+totalPrice);
 
             }
             // Other Wise
+            else if (choice >5 || choice <0){
+
+                System.out.println("😓This feature is comming soon...");
+                System.out.println("Please enter number 1 or 2 or 3 or 4 or 5");
+            }
+
             else{
-                System.out.println("😓This Feature Comming Soon...........");
-                System.out.println("Please Enter Number 1 or 2 or 3 or 4 or 5");
+                break;
             }
 
             
             // Break From Loop
-            System.out.print("If You Want To Break Break Press 0 Otherwise 1 :  ");
+            System.out.print("If You Want To exit, Press 0. Otherwise, press 1 :  ");
             exit =sc.nextInt();
 
             // Extra Security 
             if(exit==0){
-                 System.out.print("Are You sure🥷 then Press Again 0 other wise 1 : ");
+                 System.out.print("Are You sure? Press 0 again to confirm exit, Otherwise press 1 : ");
                  exit =sc.nextInt(); 
             }
            
@@ -137,7 +178,7 @@ class ShoppingCart{
     // Add To Cart Method
     public static void addToCart(Map <Item,Integer> cart,Item item, Integer quantity ){   
         if(!cart.containsKey(item)){
-             cart.put(item,quantity);
+            cart.put(item,quantity);
         }
 
     }
@@ -199,15 +240,17 @@ class ShoppingCart{
         }
 
         else{
-      
-
+            System.out.println("");
+            System.out.println("------------Meta Mart------------------Thursday 6 Mar 2025------------");
+            System.out.println("");
+            System.out.println("----------------------------------------------------------------------");
             System.out.println("Id"+"           "+"Name"+"           "+"Quantity"+"           "+"Price");
-            System.out.println("------------------------------------------------------------------");
+            System.out.println("----------------------------------------------------------------------");
             for(Item item: cart.keySet()){
                 totalPrice+=cart.get(item)*item.price;
-                System.out.println(item.itemId+"           "+item.name+"           "+cart.get(item)+"             "+cart.get(item)*item.price);
+                System.out.println(item.itemId+"          "+item.name+"          "+cart.get(item)+"             "+cart.get(item)*item.price);
             }
-            System.out.println("-------------------------------------------------------------------");
+            System.out.println("----------------------------------------------------------------------");
  
            
         }

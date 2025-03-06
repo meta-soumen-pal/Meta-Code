@@ -1,6 +1,8 @@
-
-import java.util.*;
 import java.util.Scanner;
+import java.util.Scanner;
+import java.util.HashMap;
+import java.util.Map;
+
 
 // Item Structure
 class Item{
@@ -19,10 +21,8 @@ class Item{
  
 }
 
-class ShoppingCart{
+public class ShoppingCart{
 
-
-    
     // Main Method
     public static void main(String args[]){
 
@@ -68,9 +68,9 @@ class ShoppingCart{
                 System.out.print("Enter product price : ");
                 double price=sc.nextInt();
                 
-                // Check Value Greter Than 0
+                // Check if Value less Than 0
                 if(price < 0){
-                    System.out.print("Warning ⚠️...Enter product price(It Must Be Greter Than 0) : ");
+                    System.out.print("Warning ⚠️...Enter quantity (Quantity Must Be Greater Than 0 ) : ");
                     price=scInt.nextInt();
                 }
 
@@ -234,11 +234,11 @@ class ShoppingCart{
             cart.replace(item,cart.get(item)+quantity);
         }
         else{
-            System.out.println("This Item Id Is not Abilible Plese Enter one Valid Id ");
+            System.out.println("This Item Id Is not Available Please Enter one Valid Id");
         }
     }
 
-    // Deleate Item Method
+    // Delete Item Method
     public static void deleteItem(Map<Item,Integer>cart,Map<Integer, Item>itemList, int itemId){
 
         Item item=itemList.get(itemId);
